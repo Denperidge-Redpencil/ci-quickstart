@@ -8,8 +8,8 @@ do
     rm -rf $tmpci
     mkdir -p $tmpci
     
-    cp .release/$type.tar.gz $tmpci
-    #curl -L -o $tar https://github.com/Denperidge-Redpencil/ci-quickstart/releases/latest/download/$type.tar.gz
+    #cp .release/$type.tar.gz $tmpci
+    curl -L -o $tar https://github.com/Denperidge-Redpencil/ci-quickstart/releases/latest/download/$type.tar.gz
     tar -xzf $tar -C $tmpci
 
     for file in $(find $tmpci -name "*.yml")
