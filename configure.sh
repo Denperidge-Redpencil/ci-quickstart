@@ -2,15 +2,19 @@
 
 select type in emberjs python
 do
-    mkdir -p /tmp/ci-quickstart/
-    tar=/tmp/ci-quickstart/$type.tar.gz
-    
-    curl -L -o $tar https://github.com/Denperidge-Redpencil/ci-quickstart/releases/latest/download/$type.tar.gz
-    tar -xzf $tar -C /tmp/ci-quickstart/
+    tmpci=/tmp/ci-quickstart
+    tar=$tmpci/$type.tar.gz
 
-    for file in $(find /tmp/ci-quickstart -name "*.yml")
+    rm -rf $tmpci
+    mkdir -p $tmpci
+    
+    cp .release/$type.tar.gz $tmpci
+    #curl -L -o $tar https://github.com/Denperidge-Redpencil/ci-quickstart/releases/latest/download/$type.tar.gz
+    tar -xzf $tar -C $tmpci
+
+    for file in $(find $tmpci -name "*.yml")
     do
-        read -p "Enable ${file#$type/}? [Y/n] " enable
+        read -p "Enable ${file#$tmpci/$type/}? [Y/n] " enable
         case $enable in
             [Nn]*) rm $file ;;
         esac
@@ -19,10 +23,9 @@ do
     rm $tar
 
     mkdir -p .woodpecker
-    mv /tmp/ci-quickstart/*/* .woodpecker/
+    mv $tmpci/*/* .woodpecker/
 
-    rmdir /tmp/ci-quickstart/*
-    rmdir /tmp/ci-quickstart/
+    rm -rf $tmpci
     
     break
 done
